@@ -46,24 +46,8 @@ namespace Bits_And_Bytes_Vincenzo_Russo
             // This is similar to the RememberMe option when you log in.
             app.UseTwoFactorRememberBrowserCookie(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
 
-            // Uncomment the following lines to enable logging in with third party login providers
-            //app.UseMicrosoftAccountAuthentication(
-            //    clientId: "",
-            //    clientSecret: "");
-
-            //app.UseTwitterAuthentication(
-            //   consumerKey: "",
-            //   consumerSecret: "");
-
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
-
-            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            {
-                ClientId = "502288063591-t3ihh9m1brti5t3mqqueu48eq8ebclnj.apps.googleusercontent.com",
-                ClientSecret = "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",               
-            });
+            
+          
 
            
         }
