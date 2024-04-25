@@ -1,0 +1,96 @@
+﻿@model IEnumerable <Bits_And_Bytes_Vincenzo_Russo.Models.Product>
+
+@{
+    ViewBag.Title = "Shop";
+}
+
+<style>
+  .card-body{
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+     
+  }
+</style>
+
+<h2 style="color: #4db7b7; text-align: center">Shopping Home</h2>
+
+<div class="row">
+
+    <div class="container-fluid bg-light py-3">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-8">
+                <h2 class="text-center mb-4" style="color: #4db7b7">Shop by Category</h2>
+                <div class="list-group">
+                    @foreach (var item in ViewBag.Categories)
+                    {
+                        <a href="@Url.Action("Products", "Shop", new { id = item.CategoryId })" class="list-group-item list-group-item-action text-center">@item.Name</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+
+
+    <div class="row">
+
+        @if (Model.Count() == 0)
+        {
+            <div class="card-body">
+                <h5 class="card-title">
+                    Error: No products to display. Please select another category!
+                </h5>
+            </div>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <div class="col-sm-4 col-lg-4 col-mb-4">
+                    <div class="card">
+
+                        <a href="@Url.Action("Product","Shop", new {id = item.ProductId})">
+                            <img class="card-body img-fluid img-responsive" style="height:250px; margin-left: auto; margin-right: auto; display: block align-content"center" src="@item.ImageUrl" alt="" />
+                        </a>
+                        <div class="card-body">
+                            <h4 class="card-title">
+
+                                <a href="@Url.Action("Product", "Shop", new { id = item.ProductId })">@item.ProductName</a>
+                            </h4>
+                            <h5 style="color: #4db7b7">£@item.ProductPrice</h5>
+                            <p class="card-title">@item.Category.Name</p>
+                            <p class="card-title">@item.ProductType</p>
+                        </div>
+                        <div class="class-footer">
+                            <small class="text-muted">
+                                @if (item.InStock == true)
+                                {
+                                    <mark style="right: auto; background-color: #4db7b7 ">IN STOCK</mark>
+                                    if (item.IsDiscounted)
+                                    {
+                                        <mark style="right:auto; background-color:lightgreen">@(item.ProductDiscount * 100)% OFF!</mark>
+                                    }
+                                    if (item.IsBOGOF)
+                                    {
+                                        <mark style="right:auto; background-color: lightgreen">BUY ONE GET ONE FREE!</mark>
+                                    }
+                                }
+                                else if (item.ProductStock < 1)
+                                {
+                                    <mark>OUT OF STOCK</mark>
+                                }
+                                else
+                                {
+                                    <mark>IN STOCK</mark>
+                                }
+
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

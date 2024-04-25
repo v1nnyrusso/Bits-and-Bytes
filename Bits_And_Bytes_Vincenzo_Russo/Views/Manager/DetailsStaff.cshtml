@@ -1,0 +1,137 @@
+﻿@model Bits_And_Bytes_Vincenzo_Russo.Models.Staff
+
+@{
+    ViewBag.Title = "DetailsStaff";
+}
+
+<h2>Staff Details</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DOB)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DOB)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Town)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Town)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PostCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PostCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PostCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PostCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RegisteredAt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RegisteredAt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsMember)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsMember)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrderCount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsSuspended)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsSuspended)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EmailConfirmed)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EmailConfirmed)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StaffPosition)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StaffPosition)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "EditStaff", new { id = Model.Id }) |
+    @Html.ActionLink("Back to Admin Dashboard", "Index")
+</p>

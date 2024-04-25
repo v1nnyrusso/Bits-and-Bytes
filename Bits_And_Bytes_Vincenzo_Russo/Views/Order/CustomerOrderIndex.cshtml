@@ -1,0 +1,94 @@
+﻿@model IEnumerable<Bits_And_Bytes_Vincenzo_Russo.Models.Order>
+
+@{
+    ViewBag.Title = "CustomerOrderIndex";
+}
+
+<h2>My Orders</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.OrderStatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrderDate)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.DateCancelled)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrderTotal)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsPaid)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Subtotal)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MembershipDiscount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.VatAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AddVat)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.OrderStatus)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrderDate)
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.DateCancelled)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrderTotal)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsPaid)
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.Subtotal)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MembershipDiscount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.VatAmount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AddVat)
+        </td>
+        <td>
+
+            @Html.ActionLink("Details", "OrderDetails", new { id = item.OrderId }) |
+
+            @if (item.OrderStatus != Bits_And_Bytes_Vincenzo_Russo.Models.OrderStatus.Cancelled)
+            {
+                if (item.OrderStatus != Bits_And_Bytes_Vincenzo_Russo.Models.OrderStatus.CancellationRequested)
+                {
+                    @Html.ActionLink("Request Cancellation", "RequestCancellation", "Order", new { id = item.OrderId }, new { onsubmit = "return confirm('Are you sure?');" })
+                    @Html.AntiForgeryToken()
+                }
+
+            }
+
+
+        </td>
+    </tr>
+}
+
+</table>

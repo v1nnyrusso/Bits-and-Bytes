@@ -1,0 +1,97 @@
+﻿@model IEnumerable<Bits_And_Bytes_Vincenzo_Russo.Models.Order>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.OrderId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Customer.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrderDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateCancelled)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrderTotal)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsPaid)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrderStatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Subtotal)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MembershipDiscount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.VatAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AddVat)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrderId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Customer.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrderDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateCancelled)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrderTotal)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsPaid)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrderStatus)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Subtotal)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MembershipDiscount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.VatAmount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AddVat)
+        </td>
+        <td>
+            @if (item.OrderStatus != Bits_And_Bytes_Vincenzo_Russo.Models.OrderStatus.Cancelled)
+            {
+                @Html.ActionLink("Edit", "Edit", new { id = item.OrderId }) <span>|</span>
+            }
+
+            @Html.ActionLink("Details", "Details", new { id = item.OrderId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.OrderId })
+        </td>
+    </tr>
+}
+
+</table>

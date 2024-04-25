@@ -1,0 +1,287 @@
+﻿@using Bits_And_Bytes_Vincenzo_Russo.Models
+@model List<Cart>
+@using System.Diagnostics.Eventing.Reader
+@using System.Globalization
+
+
+
+
+@{
+    ViewBag.Title = "Store Checkout";
+
+
+}
+
+<html>
+<head>
+<style>
+    .small-img-row{
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .small-img-col{
+        flex-basis: 24%;
+        cursor: pointer;
+    }
+
+    .cart-page{
+        margin: 80px auto;
+
+    }
+    table{
+        width: 100%;
+        border-collapse: collapse
+    }
+    .cart-info{
+        display:flex;
+        flex-wrap: wrap;
+
+    }
+    th {
+        text-align: left;
+        padding: 5px;
+        color: #fff;
+        background: #4db7b7;
+        font-weight: normal;
+    }
+
+    td{
+        padding: 10px 5px;
+
+    }
+        td a {
+            color: #4db7b7;
+            font-size: 12px;
+        }
+        td img{
+            width: 80px;
+            height: 80px;
+            margin-right: 10px;
+        }
+    .btn-lg {
+        text-align: center;
+        background-color: #4db7b7;
+        color: #fff;
+        border-style: solid;
+        border-color: #212322
+    }
+
+    .removesomething {
+        width: 80px;
+        height: 80px;
+        margin-right: 10px;
+    }
+
+
+
+</style>
+
+</head>
+
+
+<body>
+
+    @if (Session["cart"] == null || !(Session["cart"] is List<Cart>) || Model.Count == 0)
+    {
+        <p>Your basket is currently empty.</p>
+        @Html.ActionLink("Back to Shopping", "Index")
+    }
+    else
+    {
+        <div class="small-container cart-page">
+            <table>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Increase/Decrease</th>
+                    <th>Discount</th>
+                    <th>SubTotal</th>
+
+
+                </tr>
+                @foreach (var item in (List<Cart>)Session["cart"])
+                {
+            
+
+                    <tr>
+                        <td>
+                            <div class="cart-info">
+                                <img src="@item.Product.ImageUrl" />
+                            </div>
+
+                            <div>
+                                <p>@item.Product.ProductName</p>
+                                <small>@item.Product.ProductPrice</small>
+                                <br>
+                            </div>
+                        </td>
+
+                        <td>
+                            @item.Count
+                        </td>
+
+                        <td>
+                            @if (item.Count < item.Product.ProductStock)
+                            {
+                                <a href="@Url.Action("AddToCart", "Shop", new {ProductId = item.Product.ProductId})"> Add</a>
+                            }
+                            else
+                            {
+                                <mark>Out of stock!</mark>
+                            }
+                            <a href="@Url.Action("DecreaseByOne", "Shop", new {ProductId = item.Product.ProductId})">   Remove</a>
+                        </td>
+
+                        <td>
+
+                            @if (item.Product.IsDiscounted)
+                            {
+                                <p> - @(item.Product.ProductDiscount * 100)%</p>
+                            }
+                            else
+                            {
+                                <p>N/A</p>
+                            }
+                        </td>
+
+                        <td>
+                            @if (item.Product.IsBOGOF && item.Count % 2 == 0)
+                            {
+                                var priceBeforebogof = item.Product.ProductPrice * item.Count;
+                                // Calculate total with BOGOF (even quantity)
+                                var boGOFPrice = item.Product.ProductPrice * item.Count / 2;
+
+                                <span class="font-weight-bold">£<del>@priceBeforebogof</del> £@boGOFPrice</span>
+                                <br />
+                                <span>Buy One Get One Free!</span>
+                            }
+                            else if (item.Product.IsBOGOF && item.Count % 2 != 0)
+                            {
+                                var priceBeforeBogof = item.Product.ProductPrice * item.Count;
+                                // Calculate total with BOGOF (odd quantity)
+                                var oddCountForCalculation = (int)Math.Ceiling((decimal)item.Count / 2);
+                                var boGOFPrice = oddCountForCalculation * item.Product.ProductPrice;
+
+                                if (item.Count != 1)
+                                {
+                                    <span class="font-weight-bold">
+                                        £<del>@priceBeforeBogof</del>
+                                        <br />
+                                        £@boGOFPrice
+                                        <br />
+                                        <span>Buy One Get One Free!</span>
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span>@priceBeforeBogof</span>
+                                }
+                            }
+                            else if (item.Product.IsDiscounted)
+                            {
+                                <span class="font-weight-bold">
+                                    £<del>@(item.Product.ProductPrice * item.Count)</del>
+                                    £@((item.Product.ProductPrice * item.Count) - Math.Round(item.Product.ProductPrice * item.Product.ProductDiscount, 2))
+                                    <br />
+                                </span>
+                            }
+                            else
+                            {
+                                <p>£@(item.Product.ProductPrice * item.Count)</p>
+                            }
+                        </td>
+
+                        <td>
+                            @if (item.Count > 1)
+                            {
+                                <a href="@Url.Action("RemoveFromCart", "Shop", new { ProductId = item.Product.ProductId })" class="removesomething">
+                                    Remove All
+                                </a>
+                            }
+
+                        </td>
+                    </tr>
+
+                }
+                <tr>
+                    <td colspan="3">
+
+                        <strong>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                BitsBytesDbContext db = new BitsBytesDbContext();
+
+                                // Get the current user's information
+                                var userName = User.Identity.Name;
+                                var user = db.Users.FirstOrDefault(u => u.UserName == userName) as Customer;
+
+                                //If a user is a member
+                                if (user.OrderCount >= 30 && user.OrderCount < 90)
+                                {
+                                    if (Model.Count > 0)
+                                    {
+                                        <span>
+                                            After Membership Discount
+                                            <br />
+                                            +VAT(20%)
+                                            <br />
+                                            Total: £@ViewBag.Total
+                                        </span>
+                                    }
+                            
+
+                                }
+                                else if (user.OrderCount < 30)
+                                {
+                                    if (Model.Count > 0)
+                                    {
+                                        <span>
+                                            +VAT(20%)
+                                            <br />
+                                            Total: £@ViewBag.Total
+                                        </span>
+                                    }
+                               
+
+                                }
+                                else
+                                {
+                                    if (Model.Count > 0)
+                                    {
+                                    <span>
+                                        After Membership Discount 
+                                        <br />
+                                        Total: £@ViewBag.Total
+                                    </span>
+                                    }
+                              
+
+                                }
+                            }
+
+                        </strong>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <p>
+            @Html.ActionLink("Back to Shopping", "Index")
+            @using (Html.BeginForm("Checkout", "Shop"))
+            {
+                <input type="submit" value="Proceed to Checkout" />
+
+            }
+        </p>
+    }
+
+
+
+</body>
+
+
+
+
+</html>

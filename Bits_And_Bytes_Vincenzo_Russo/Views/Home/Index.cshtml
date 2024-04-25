@@ -1,0 +1,54 @@
+﻿@model List<Bits_And_Bytes_Vincenzo_Russo.Models.Product>
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<style>
+    .card-body {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    img{
+        width: 50px;
+        height: 300px;
+    }
+</style>
+
+<div class="align-middle">
+    <div class="align-items-center">
+        <h1 style="text-align: center;" class="well-lg">Welcome to Bits and Bytes!</h1>
+        <div class="row">
+            <div class="col-lg-4 col-sm-6">
+                <div class="card">
+                    <img class="card-img-top" src="~/Images/Laptops/asus-zephyr.jpg" alt="Systems">
+                    <div class="card-body">
+                        <h5 class="card-title">Computer Systems</h5>
+                        <p class="card-text">Explore our range of computer systems.</p>
+                        <a href="@Url.Action("ComputerSystems", "Shop")" class="btn btn-primary">Shop Systems</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-6">
+                <div class="card">
+                    <img class="card-img-top" src="~/Images/Speakers/Sonos-One.jpg" alt="Parts">
+                    <div class="card-body">
+                        <h5 class="card-title">Computer Parts</h5>
+                        <p class="card-text">Discover our selection of computer parts.</p>
+                        <a href="@Url.Action("ComputerParts", "Shop")" class="btn btn-primary">Shop Parts</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-6">
+                <div class="card">
+                    <img class="card-img-top" src="~/Images/shopping-cart-3-3-84089.jpg" alt="Parts">
+                    <div class="card-body">
+                        <h5 class="card-title">Shop ALL</h5>
+                        <p class="card-text">Or, shop them all!</p>
+                        <a href="@Url.Action("Index", "Shop")" class="btn btn-primary">Shop ALL</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

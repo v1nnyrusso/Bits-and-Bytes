@@ -1,0 +1,113 @@
+﻿@model IEnumerable<Bits_And_Bytes_Vincenzo_Russo.Models.Product>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2 style="text-align: center; color: #4db7b7">- Product Dashboard -</h2>
+@if (User.IsInRole("Manager"))
+{
+    <p>
+        @Html.ActionLink("Create New Product", "Create")
+    </p>
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Category.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductDescription)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductPrice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductStock)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsDiscounted)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductDiscount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsBOGOF)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.InStock)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ImageUrl)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductType)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductStock)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsDiscounted)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductDiscount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsBOGOF)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InStock)
+            </td>
+            <td>
+                <img class="img-fluid img-responsive" style="max-height:50px" src="@item.ImageUrl" alt="" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductType)
+
+            </td>
+            <td>
+                @if (User.IsInRole("Manager"))
+                {
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ProductId })<p>|</p>
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ProductId })<p>|</p>
+                }
+
+                @Html.ActionLink("Details", "Details", new { id = item.ProductId })
+
+            </td>
+        </tr>
+    }
+
+</table>
+
+@using (Html.BeginForm("ExportToPDF", "Products", FormMethod.Post))
+{
+    <input type="submit" id="btnSubmit" value="Download PDF" />
+}
+
+@using (Html.BeginForm("ExportProductsToExcel", "Products", FormMethod.Post))
+{
+    <input type="submit" id="btnSubmit" value="Download Spreadsheet" />
+}

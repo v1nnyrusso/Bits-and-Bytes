@@ -1,0 +1,133 @@
+﻿@model IEnumerable<Bits_And_Bytes_Vincenzo_Russo.Models.User>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2 style="text-align: center; color: #4db7b7">- User Dashboard -</h2>
+
+@Html.ActionLink("Create New Member of Staff", "CreateStaff") <p>
+    @Html.ActionLink("Create New Customer", "CreateCustomer", "SalesAssistant")
+</p>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CurrentRole)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DOB)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Town)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PostCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Country)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RegisteredAt)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.IsSuspended)
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CurrentRole)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DOB)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Town)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PostCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Country)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RegisteredAt)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.IsSuspended)
+            </td>
+
+            <td>
+                @* Depending on whether or not it is staff or a customer, the button will change *@
+
+                @if (item is Bits_And_Bytes_Vincenzo_Russo.Models.Staff)
+                {
+                    <form method="get" action="@Url.Action("EditStaff", new { id = item.Id })">
+                        <button type="submit">Edit</button>
+                    </form>
+                }
+                else if (item is Bits_And_Bytes_Vincenzo_Russo.Models.Customer)
+                {
+                    @Html.ActionLink("Edit Customer", "EditCustomer", "Manager", new { id = item.Id }, new { @class = "btn btn-info" })
+                }
+                <form method="get" action="@Url.Action("Details", new { id = item.Id })">
+                    <button type="submit">Details</button>
+                </form>
+                @using (Html.BeginForm("DeleteUser", "Manager", FormMethod.Post, new { onsubmit = "return confirm('Are you sure you want to delete this user?');" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@item.Id" />
+                    <button type="submit">Delete</button>
+                }
+                <form method="get" action="@Url.Action("ChangeRole", new { id = item.Id })">
+                    <button type="submit">Change Role</button>
+                </form>
+            </td>
+
+
+        </tr>
+
+
+    }
+
+</table>
+
+

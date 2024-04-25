@@ -1,0 +1,280 @@
+﻿@model Bits_And_Bytes_Vincenzo_Russo.Models.Order
+
+@{
+    ViewBag.Title = "Confirmation";
+}
+
+<style>
+
+    background-color: #ffe8d2;
+    font-family: 'Montserrat', sans-serif
+    }
+
+    .card {
+        border: none
+    }
+
+    .logo {
+        background-color: #eeeeeea8
+    }
+
+    .totals tr td {
+        font-size: 13px
+    }
+
+    .footer {
+        background-color: #eeeeeea8
+    }
+
+        .footer span {
+            font-size: 12px
+        }
+
+    .product-qty span {
+        font-size: 12px;
+        color: #dedbdb
+    }
+</style>
+
+<div class="container mt-5 mb-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="invoice p-5">
+                    <h5>Your order is Confirmed!</h5> <span class="font-weight-bold d-block mt-4">Hello, @Model.Customer.FirstName</span> <span>You order has been confirmed and will be shipped in next two days!</span>
+                    <div class="payment border-top mt-3 mb-3 border-bottom table-responsive">
+                        <table class="table table-borderless">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="py-2"> <span class="d-block text-muted">Order Date</span>@Model.OrderDate. </div>
+                                    </td>
+                                    <td>
+                                        <div class="py-2"> <span class="d-block text-muted">Order No</span> <span>@Model.OrderId</span> </div>
+                                    </td>
+                                    <td>
+                                        <div class="py-2"> <span class="d-block text-muted">Payment</span> <span><img src="https://img.icons8.com/color/48/000000/mastercard.png" width="20" /></span> </div>
+                                    </td>
+                                    <td>
+                                        <div class="py-2">
+                                            <span class="d-block text-muted">Shipping Address</span> <span>
+                                                @Model.DeliveryAddress,
+                                                @Model.DeliveryTown,
+                                                @Model.DeliveryPostCode,
+                                                @Model.DeliveryCountry
+                                            </span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="product border-bottom table-responsive">
+                        <table class="table table-borderless">
+                            <tbody>
+                                @foreach (var item in Model.OrderLines)
+                                {
+
+                                    <tr>
+                                        <td width="20%"> <img src="@item.Product.ImageUrl" width="90"> </td>
+                                        <td width="60%">
+                                            <span class="font-weight-bold">@item.Product.ProductName</span>
+                                            <div class="product-qty"> <span class="d-block">Quantity: @item.Quantity</span> </div>
+                                        </td>
+                                        <td width="20%">
+                                            <div class="text-right">
+                                                @if (item.Product.IsBOGOF && item.Quantity % 2 == 0)
+                                                {
+                                                    var priceBeforebogof = item.Price * item.Quantity;
+                                                    // Calculate total with BOGOF (even quantity)
+                                                    var boGOFPrice = item.Price * item.Quantity / 2;
+
+
+
+                                                    <span class="font-weight-bold">£<del>@priceBeforebogof</del> £@boGOFPrice</span>
+                                                    <br />
+                                                    <span>Buy One Get One Free!</span>
+                                                }
+                                                else if (item.Product.IsBOGOF && item.Quantity % 2 != 0)
+                                                {
+
+                                                    var priceBeforeBogof = item.Price * item.Quantity;
+                                                    // Calculate total with BOGOF (odd quantity)
+                                                    var oddCountForCalculation = (int)Math.Ceiling((decimal)item.Quantity / 2);
+                                                    var boGOFPrice = oddCountForCalculation * item.Product.ProductPrice;
+
+
+
+                                                    if (item.Quantity != 1)
+                                                    {
+                                                        <span class="font-weight-bold">
+                                                            £<del>@priceBeforeBogof</del>
+                                                            <br />
+                                                            £@boGOFPrice
+                                                            <br />
+                                                            <span>Buy One Get One Free!</span>
+                                                        </span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="font-weight-bold">£@(item.Price * item.Quantity)</span>
+
+                                                    }
+
+                                                }
+                                                else if (item.Product.IsDiscounted)
+                                                {
+
+
+                                                    <span class="font-weight-bold">
+                                                        £<del>@item.Product.ProductPrice</del>
+
+                                                        £@item.Price
+                                                        <br />
+                                                        @(item.Product.ProductDiscount * 100)% OFF!
+                                                    </span>
+
+
+                                                }
+                                                else
+                                                {
+                                                    // Regular price
+                                                    <span class="font-weight-bold">£@(item.Price * item.Quantity)</span>
+
+                                                }
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                            @{
+                                // Calculate Subtotal
+                                decimal subtotal = Model.Subtotal;
+
+                                decimal vatFee = 0m;
+                                if(Model.Customer.OrderCount < 30)
+                                {
+                                    vatFee = Math.Round(subtotal * 0.2m, 2);
+                                }
+                                // Calculate VAT Fee (20% of Subtotal)
+                                else if (Model.Customer.OrderCount >= 30 && Model.Customer.OrderCount < 60)
+                                {
+                                    subtotal -= (subtotal * 0.05m);
+
+                                    vatFee = Math.Round(subtotal * 0.2m, 2);
+                                }
+                                else if (Model.Customer.OrderCount >= 60 && Model.Customer.OrderCount < 90 || Model.Customer.OrderCount > 90)
+                                {
+                                    subtotal -= (subtotal * 0.10m);
+
+                                    vatFee = Math.Round(subtotal * 0.2m, 2);
+                                }
+
+                            }
+                        </table>
+                    </div>
+                    <div class="row d-flex justify-content-end">
+                        <div class="col-md-5">
+                            <table class="table table-borderless">
+                                <tbody class="totals">
+                                    <tr>
+                                        <td>
+                                            <div class="text-left"> <span class="text-muted">Shipping Fee</span> </div>
+                                        </td>
+                                        <td>
+                                            <div class="text-right"> <span>FREE</span> </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="text-left"> <span class="text-muted">Subtotal</span> </div>
+                                        </td>
+                                        <td>
+                                            £@Model.Subtotal
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="text-left"> <span class="text-muted">Membership Discount</span> </div>
+                                        </td>
+                                        <td>
+                                            <div class="text-right">
+                                                <span class="text-success">
+                                                    <span class="text-success">
+                                                        @if (Model.Customer.OrderCount >= 30 && Model.Customer.OrderCount < 60)
+                                                        {
+                                                            decimal discountAmount = Math.Round(Model.Subtotal * 0.05m, 2);
+                                                            <span> - £@discountAmount  </span>
+                                                            <br />
+                                                            <span> 5% OFF!</span>
+                                                        }
+                                                        else if (Model.Customer.OrderCount >= 60 && Model.Customer.OrderCount < 90 || Model.Customer.OrderCount >= 90)
+                                                        {
+                                                            decimal discountAmount = Math.Round(Model.Subtotal * 0.1m, 2);
+                                                            <span> - £@discountAmount</span>
+                                                            <br />
+                                                            <span> 10% OFF!</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>N/A</span>
+                                                        }
+                                                    </span>
+
+
+                                                </span>
+                                            </div>
+                                        </td>
+                                    <tr>
+                                        <td>
+                                            <div class="text-left"> <span class="text-muted">VAT Fee (20%)</span> </div>
+                                        </td>
+                                        <td>
+                                            <div class="text-right">
+                                                <span>
+                                                    @if (Model.Customer.OrderCount > 90)
+                                                    {
+                                                        <span>N/A</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>+ £@vatFee</span>
+                                                    }
+
+                                                </span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tr>
+                                    <tr class="border-top border-bottom">
+                                        <td>
+                                            <div class="text-left"> <span class="font-weight-bold">Total</span> </div>
+                                        </td>
+                                        <td>
+                                            <div class="text-right"> <span class="font-weight-bold">£@Model.OrderTotal</span> </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <p>An email highlighting your order will be sent shortly.</p>
+
+                    <p class="font-weight-bold mb-0">Thanks for shopping with us!</p> <span>~ Bits and Bytes Team ~</span>
+
+                    <br />
+
+                    <form action="/Order/ExportToPDF" method="post">
+                        <input type="hidden" name="id" value="@Model.OrderId" />
+                        <input type="submit" value="Download Receipt" />
+                    </form>
+
+
+                </div>
+                <div class="d-flex justify-content-between footer p-3"> <span>Need Help? visit our @Html.ActionLink("Frequently Asked Questions", "FAQ", "Home")</span> <span>@DateTime.Now</span> </div>
+            </div>
+        </div>
+    </div>
+</div>
+

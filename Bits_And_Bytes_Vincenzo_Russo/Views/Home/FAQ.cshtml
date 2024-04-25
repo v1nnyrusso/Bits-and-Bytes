@@ -1,0 +1,79 @@
+﻿@{
+    ViewBag.Title = "FAQ";
+}
+
+<style>
+    .faq-question {
+        cursor: pointer;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #4db7b7
+    }
+
+    .faq-answer {
+        display: none;
+        margin-bottom: 20px;
+    }
+
+        .faq-answer p {
+            margin: 0;
+        }
+</style>
+
+<h2 style="color: #4db7b7"class="text-center">Frequently Asked Questions</h2>
+<div class="text-center">
+    <div class="faq-question" onclick="toggleAnswer('faq1')">How does your membership system work?</div>
+    <div id="faq1" class="faq-answer">
+        <p>Customer's receive bronze membership status at 30 orders, silver status at 60 orders, and gold status at 90 orders. </p>
+        <p>
+            Bronze member's receive a 5% discount off their total order, Silver Members receive 10% off - and Gold Members receive 10% off, AND VAT Free!
+        </p>
+    </div>
+
+    <div class="faq-question" onclick="toggleAnswer('faq2')">How can I track my order?</div>
+    <div id="faq2" class="faq-answer">
+        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam volutpat bibendum nisi, eu laoreet justo scelerisque at.</p>
+    </div>
+
+    <div class="faq-question" onclick="toggleAnswer('faq3')">What payment methods do you accept?</div>
+    <div id="faq3" class="faq-answer">
+        <p>Fusce ut fermentum elit. Sed eleifend, mauris at tristique euismod, mi arcu fermentum nunc, in fermentum odio ex nec justo.</p>
+    </div>
+
+    <div class="faq-question" onclick="toggleAnswer('faq4')">How long does shipping usually take?</div>
+    <div id="faq4" class="faq-answer">
+        <p>Maecenas id ultrices lacus. Sed tristique elit id lectus elementum cursus.</p>
+    </div>
+
+    <div class="faq-question" onclick="toggleAnswer('faq5')">Do you offer international shipping?</div>
+    <div id="faq5" class="faq-answer">
+        <p>Duis vel consequat ipsum. Donec varius lorem non ultrices consequat. Mauris ac quam nisl.</p>
+    </div>
+
+    <div class="faq-question" onclick="toggleAnswer('faq6')">How do I check what membership status i'm currently at?</div>
+    <div id="faq6" class="faq-answer">
+        <p>It displays on the navbar next to your email.</p>
+    </div>
+
+
+</div>
+
+
+
+<script>
+    //Function to toggle the display of the answer
+    function toggleAnswer(id) {
+        //Get the element by its ID
+        var answer = document.getElementById(id);
+
+        //Toggle the answer display by checking its current state
+        if (answer.style.display === 'none' || answer.style.display === '') {
+            //If hidden or no display value set, show the answer by setting the display to 'block'
+            answer.style.display = 'block';
+        } else {
+            //If visible, hide the answer by setting the display to 'none'
+            answer.style.display = 'none';
+        }
+    }
+</script>
+

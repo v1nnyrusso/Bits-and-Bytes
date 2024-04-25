@@ -1,0 +1,142 @@
+﻿@using Bits_And_Bytes_Vincenzo_Russo.Models
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Bits and Bytes</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <link rel="stylesheet" href="~/Content/bootstrap-cerulean.css" />
+</head>
+<body>
+
+
+
+
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #4db7b7">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                @Html.ActionLink("Bits and Bytes", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor03">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })
+                    </li>
+
+                    <li class="nav-item">
+                        @Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })
+                    </li>
+
+                    @* Only display shop to users that are logged in and not suspended *@
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        if (!User.IsInRole("Suspended"))
+                        {
+                            <li class="nav-item">
+                                @Html.ActionLink("Shop", "Index", "Shop", new { area = "" }, new { @class = "nav-link" })
+                            </li>
+                        }
+                        if (User.IsInRole("Customer"))
+
+                        {
+                            <li class="nav-item">
+                                @Html.ActionLink("My Orders", "CustomerOrderIndex", "Order", new { area = "" }, new { @class = "nav-link" })
+                            </li>
+                        }
+
+                        if (User.IsInRole("Manager"))
+                        {
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> - Manager Hub - </a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="@Url.Action("Index", "Manager")"> User Dashboard</a>
+                                    <a class="dropdown-item" href="@Url.Action("Index", "Products")">Product Dashboard</a>
+                                    <a class="dropdown-item" href="@Url.Action("Index", "Order")">Order Dashboard</a>
+
+                                </div>
+                            </li>
+                        }
+                        if (User.IsInRole("Sales Assistant"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> - Sales Assistant Hub - </a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="@Url.Action("Index", "SalesAssistant")"> Customer Dashboard</a>
+                                    <a class="dropdown-item" href="@Url.Action("Index", "Products")">Product Dashboard</a>
+                                </div>
+                            </li>
+                        }
+
+                    }
+
+
+                </ul>
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    if (User.IsInRole("Customer"))
+                    {
+                        var cart = (List<Cart>)Session["cart"];
+                        int cartCount = 0;
+
+                        if (cart != null)
+                        {
+                            foreach (var item in cart)
+                            {
+                                cartCount += item.Count;
+                            }
+                        } 
+
+                        <a style="color: black" href="@Url.Action("CartIndex", "Shop")">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                            </svg>
+                        </a>
+                        <p>@cartCount</p>
+                    }
+                }
+                @Html.Partial("_LoginPartial")
+
+
+
+            </div>
+        </div>
+    </nav>
+    <div id="logo">
+        <img src="@Url.Content("~/Images/logo.jpg")" alt="Logo" />
+    </div>
+    <div class="container body-content">
+
+
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>
+                &copy; @DateTime.Now.Year - Bits and Bytes
+                @Html.ActionLink("Frequently Asked Questions", "FAQ", "Home", new { area = "" }, new { @class = "nav-link" })
+                @Html.ActionLink("Terms and Conditions", "TermsAndConditions", "Home", new { area = "" }, new { @class = "nav-link" })
+
+            </p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="Scripts/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

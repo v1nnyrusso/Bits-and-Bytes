@@ -1,0 +1,139 @@
+﻿@model Bits_And_Bytes_Vincenzo_Russo.Models.Product
+@using Bits_And_Bytes_Vincenzo_Russo.Models
+
+@{
+    ViewBag.Title = "Product";
+}
+
+
+@{ 
+    var cart = (List<Cart>)Session["cart"];
+}
+<div class="row">
+
+    <div class="col-lg-3">
+
+        <h2 class="list-unstyled" style="color: #4db7b7 ">Shop by Category</h2>
+        <div class="list-group">
+
+            @foreach (var item in ViewBag.Categories)
+            {
+                <a href="@Url.Action("Products", "Shop", new { id = item.CategoryId })" class="list-group-item">@item.Name</a>
+            }
+        </div>
+
+    </div>
+
+    <div class="col-lg-9 center-block">
+       
+        <a href="@Url.Action("Product", "Shop", new { id = Model.ProductId })">
+            <img class="img-fluid img-responsive" style="max-height:350px" src="@Model.ImageUrl" alt="" />
+        </a>
+
+        <div class="card-body">
+            <h3 class="card-title" style="color: #4db7b7;"> @Html.DisplayFor(model => model.ProductName) </h3>
+
+            <dl class="dl-horizontal">
+                @if (Model.IsDiscounted)
+                {
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ProductPrice)
+                    </dt>
+                    <dd>Was £@ViewBag.OriginalPrice</dd>
+                    <dd>
+                        NOW  £@Html.DisplayFor(model => model.ProductPrice)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ProductDescription)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.ProductDescription)
+                    </dd>
+
+                }
+                else
+                {
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ProductPrice)
+                    </dt>
+                    <dd>
+                        £@Html.DisplayFor(model => model.ProductPrice)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Category.Name)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Category.Name)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ProductDescription)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.ProductDescription)
+                    </dd>
+                }
+
+                @if (Model.IsDiscounted)
+                {
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ProductDiscount)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.ProductDiscount)% OFF!
+                    </dd>
+                }
+
+            </dl>
+        </div>
+
+        <div class="card-footer">
+            <small class="text-muted">
+                @if (Model.InStock == true)
+                {
+                    <mark>UP FOR SALE</mark>
+                }
+                else if (Model.ProductStock < 1)
+                {
+                    <mark>OUT OF STOCK</mark>
+                }
+                else
+                {
+                    <mark style="color: #4db7b7">AVAILABLE</mark>
+                }
+            </small>
+        </div>
+
+        <br />
+        <br />
+
+
+        <div>
+            @{int count = 0; }
+
+            
+
+            @if (User.IsInRole("Customer"))
+            {
+                if (cart == null)
+                {
+                    count = 0;
+                }
+                else
+                {
+                    count = cart.Count;
+                }
+                if (Model.ProductStock > 0 && Model.ProductStock > count )
+                {
+                    @Html.ActionLink("Add to cart", "AddToCart", "Shop", new { ProductId = Model.ProductId }, new { @class = "btn btn-primary" })
+                } 
+
+            }
+
+                @Html.ActionLink("Continue Shopping", "Index", "Shop", new { @class = "btn btn-primary" })
+            </div>
+
+    </div>
+       
+</div>

@@ -1,0 +1,305 @@
+﻿@model Bits_And_Bytes_Vincenzo_Russo.Models.ViewModels.CheckoutViewModel
+
+@{
+    ViewBag.Title = "Checkout";
+}
+
+<h2 style="text-align: center; color: #4db7b7">Please enter your Payment Information</h2>
+<meta charset="UTF-8">
+<!-- This script got from frontendfreecode.com -->
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+<style>
+    body {
+        background: #f5f5f5;
+        margin: 20px;
+    }
+
+    .rounded {
+        border-radius: 1rem;
+    }
+
+    .nav-pills .nav-link {
+        color: #555;
+    }
+
+        .nav-pills .nav-link.active {
+            color: white;
+        }
+
+    input[type="radio"] {
+        margin-right: 5px;
+    }
+
+    .bold {
+        font-weight: bold;
+    }
+</style>
+
+@using (Html.BeginForm("PlaceOrder", "Shop", FormMethod.Post, new { id = "checkoutForm" }))
+{
+    Bits_And_Bytes_Vincenzo_Russo.Models.BitsBytesDbContext db = new Bits_And_Bytes_Vincenzo_Russo.Models.BitsBytesDbContext();
+
+    // Get the current user's information
+    var userName = User.Identity.Name;
+    var user = db.Users.FirstOrDefault(u => u.UserName == userName) as Bits_And_Bytes_Vincenzo_Russo.Models.Customer;
+
+    //Check if to display VAT
+    if (user.OrderCount > 90)
+    {
+        <h3 style="text-align: center; color: #4db7b7">Order Total: £@ViewBag.Total</h3>
+    }
+    else
+    {
+        <h3 style="text-align: center; color: #4db7b7">Order Total After VAT: £@ViewBag.Total</h3>
+    }
+
+    <div class="row">
+        <div class="col-lg-6 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <div class="bg-white shadow-sm pt-4 pl-2 pr-2 pb-2">
+
+                        <ul role="tablist" class="nav bg-light nav-pills rounded nav-fill mb-3">
+                            <li class="nav-item">
+                                <a data-toggle="pill" href="#credit-card" class="nav-link active"> <i class="fas fa-credit-card mr-2"></i> Credit Card </a>
+                            </li>
+                            <li class="nav-item">
+                                <a data-toggle="pill" href="#paypal" class="nav-link"> <i class="fab fa-paypal mr-2"></i> Paypal </a>
+                            </li>
+                            <li class="nav-item">
+                                <a data-toggle="pill" href="#net-banking" class="nav-link"> <i class="fas fa-mobile-alt mr-2"></i> Net Banking </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="tab-content">
+
+                        <div id="credit-card" class="tab-pane fade show active pt-3">
+                            <form role="form">
+                                <div class="form-group">
+                                    <label for="username">
+                                        <h6>Card Owner</h6>
+                                    </label>
+                                    @Html.TextBoxFor(model => model.Card.CardHolderName, new { placeholder = "John Appleseed", @class = "form-control" })
+                                </div>
+                                <div class="form-group">
+                                    <label for="cardNumber">
+                                        <h6>Card number</h6>
+                                    </label>
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(model => model.Card.CardNumber, new { placeholder = "1234-5678-9123-4567", @class = "form-control" })
+                                        <div class="input-group-append">
+                                            <span class="input-group-text text-muted"> <i class="fab fa-cc-visa mx-1"></i> <i class="fab fa-cc-mastercard mx-1"></i> <i class="fab fa-cc-amex mx-1"></i> </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-8">
+                                        <div class="form-group">
+                                            <label>
+                                                <span class="hidden-xs">
+                                                    <h6>Expiration Date</h6>
+                                                </span>
+                                            </label>
+                                            <div class="input-group">
+                                                @Html.TextBoxFor(model => model.Card.ExpiryMonth, new { placeholder = "01", @class = "form-control" })
+                                                @Html.TextBoxFor(model => model.Card.ExpiryYear, new { placeholder = "12", @class = "form-control" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group mb-4">
+                                            <label data-toggle="tooltip" title="Three-digit CV code on the back of your card">
+                                                <h6>CVV <i class="fa fa-question-circle d-inline"></i></h6>
+                                            </label>
+                                            @Html.TextBoxFor(model => model.Card.Cvv2, new { placeholder = "123", @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @if (user.FirstName == null)
+                                {
+                                    <div class="form-group">
+                                        <label for="firstname">
+                                            <h6>First Name</h6>
+                                        </label>
+                                        @Html.TextBoxFor(model => model.Customer.FirstName, new { @class = "form-control", placeholder = "Enter your first name" })
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="lastname">
+                                            <h6>Second Name</h6>
+                                        </label>
+                                        @Html.TextBoxFor(model => model.Customer.LastName, new { @class = "form-control", placeholder = "Enter your second name" })
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="dob">
+                                            <h6>Date of Birth</h6>
+                                        </label>
+                                        @Html.TextBoxFor(model => model.Customer.DOB, new { @class = "form-control", placeholder = "Enter your date of birth" })
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="mobilenumber">
+                                            <h6>Mobile Number</h6>
+                                        </label>
+                                        @Html.TextBoxFor(model => model.Customer.PhoneNumber, new { @class = "form-control", placeholder = "Enter your mobile number" })
+                                    </div>
+
+                                }
+
+                                <div class="form-group">
+                                    <label for="address">
+                                        <h6>Address</h6>
+                                    </label>
+                                    @Html.TextBoxFor(model => model.Address, new { @class = "form-control", placeholder = "Enter your address" })
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="town">
+                                        <h6>Town</h6>
+                                    </label>
+                                    @Html.TextBoxFor(model => model.Town, new { @class = "form-control", placeholder = "Enter your town" })
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="postCode">
+                                        <h6>Post Code</h6>
+                                    </label>
+                                    @Html.TextBoxFor(model => model.PostCode, new { @class = "form-control", placeholder = "Enter your post code" })
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="country">
+                                        <h6>Country</h6>
+                                    </label>
+                                    @Html.TextBoxFor(model => model.Country, new { @class = "form-control", placeholder = "Enter your country" })
+                                </div>
+
+                                @*//Only allow non-members to apply, only customers can be a member*@
+                                @if (Model.IsMember == false && User.IsInRole("Customer"))
+                                {
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <strong>Become a member?</strong>
+                                            <div class="col-md-10">
+                                                <div class="checkbox">
+                                                    @Html.EditorFor(model => model.IsMember)
+                                                    @Html.ValidationMessageFor(model => model.IsMember, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="card-footer"><button type="submit" class="subscribe btn btn-primary btn-block shadow-sm">Confirm Payment</button></div>
+                            </form>
+                        </div>
+                        <!-- End -->
+                        <!-- Paypal info -->
+                        <div id="paypal" class="tab-pane fade pt-3">
+                            <h6 class="pb-2">Select your PayPal account type</h6>
+                            <div class="form-group">
+                                <label class="radio-inline"> <input type="radio" name="optradio" checked /> Domestic </label> <label class="radio-inline"> <input type="radio" name="optradio" class="ml-5" />International </label>
+                            </div>
+                            <p>
+                                <button type="button" class="btn btn-primary"><i class="fab fa-paypal mr-2"></i> Log into my PayPal</button>
+                            </p>
+                            <p class="text-muted">
+                                Note: After clicking on the button, you will be directed to a secure gateway for payment. After completing the payment process, you will be redirected back to the website to view the details of your order.
+                            </p>
+                        </div>
+                        <!-- End -->
+                        <!-- bank transfer info -->
+                        <!-- End -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    //If user does has a first name, i.e, isnt an external log in member (didnt bypass registration form to gather user info)
+    if (user.FirstName != null)
+    {
+        <script>
+            $(document).ready(function () {
+                $('#checkoutForm').submit(function (event) {
+                    event.preventDefault();
+                    //Prevent the form from submitting
+
+                    //Perform form validation
+                    var cardHolderName = $('#Card_CardHolderName').val();
+                    var cardNumber = $('#Card_CardNumber').val();
+                    var expiryMonth = $('#Card_ExpiryMonth').val();
+                    var expiryYear = $('#Card_ExpiryYear').val();
+                    var cvv2 = $('#Card_Cvv2').val();
+                    var address = $('#Address').val();
+                    var town = $('#Town').val();
+                    var postCode = $('#PostCode').val();
+                    var country = $('#Country').val();
+
+                    //If any of the fields are blank
+                    if (cardHolderName === '' || cardNumber === '' || expiryMonth === '' || expiryYear === '' || cvv2 === '' || address === '' || town === '' || postCode === '' || country === '') {
+                        //Display an error message
+                        alert('Please fill in all required fields.');
+                    } else {
+                        //If all fields are filled, submit the form
+                        this.submit();
+                    }
+                });
+            });
+        </script>
+    }
+    // ...
+
+    //else user does not have a first name, i.e., is an external log in member (bypassed registration form to gather user info)
+    else
+    {
+        <script>
+            $(document).ready(function () {
+                $('#checkoutForm').submit(function (event) {
+                    event.preventDefault();
+                    //Prevent the form from submitting
+
+                    //Perform form validation
+                    var cardHolderName = $('#Card_CardHolderName').val();
+                    var cardNumber = $('#Card_CardNumber').val();
+                    var expiryMonth = $('#Card_ExpiryMonth').val();
+                    var expiryYear = $('#Card_ExpiryYear').val();
+                    var cvv2 = $('#Card_Cvv2').val();
+                    var address = $('#Address').val();
+                    var town = $('#Town').val();
+                    var postCode = $('#PostCode').val();
+                    var country = $('#Country').val();
+                    var firstname = $('#Customer_FirstName').val();
+                    var lastname = $('#Customer_LastName').val();
+                    var dob = $('#Customer_DOB').val();
+                    var mobilenumber = $('#Customer_PhoneNumber').val();
+
+                    //If any of the fields are blank
+                    if (cardHolderName === '' || cardNumber === '' || expiryMonth === '' || expiryYear === '' || cvv2 === '' || address === '' || town === '' || postCode === '' || country === '' || firstname === '' || lastname === '' || dob === '' || mobilenumber === '') {
+                        //Display an error message
+                        alert('Please fill in all required fields.');
+                    } else {
+                        //If all fields are filled, submit the form
+                        this.submit();
+                    }
+                });
+            });
+        </script>
+    }
+
+
+
+
+
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+}

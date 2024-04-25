@@ -1,0 +1,45 @@
+﻿@model List<Bits_And_Bytes_Vincenzo_Russo.Models.OrderLine>
+
+@{
+    ViewBag.Title = "Order Details";
+}
+
+<h2>Order Details</h2>
+
+@foreach (var orderLine in Model)
+{
+    <div>
+        <h4>Product</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => orderLine.Product.ProductName)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => orderLine.Product.ProductName)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => orderLine.Quantity)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => orderLine.Quantity)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => orderLine.Price)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => orderLine.Price)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => orderLine.LineTotal)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => orderLine.LineTotal)
+            </dd>
+        </dl>
+    </div>
+}
+
+<p>
+    @Html.ActionLink("Back to Orders", "CustomerOrderIndex")
+</p>

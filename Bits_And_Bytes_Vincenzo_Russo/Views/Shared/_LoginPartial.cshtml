@@ -1,0 +1,55 @@
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+    @Html.AntiForgeryToken()
+
+<ul class="navbar-nav navbar-right">
+    <li>
+        @Html.ActionLink(User.Identity.GetUserName(), "Index", "Home", routeValues: null, htmlAttributes: new { title = "Manage", @class = "nav-link" })
+    </li>
+    @if (User.Identity.IsAuthenticated)
+    {
+
+        if (User.IsInRole("Customer"))
+        {
+            Bits_And_Bytes_Vincenzo_Russo.Models.BitsBytesDbContext db = new Bits_And_Bytes_Vincenzo_Russo.Models.BitsBytesDbContext();
+            //Get the current user's information
+            var userName = User.Identity.Name;
+            var user = db.Users.FirstOrDefault(u => u.UserName == userName) as Bits_And_Bytes_Vincenzo_Russo.Models.Customer;
+
+            if (user.OrderCount >= 30 && user.OrderCount < 60)
+            {
+                <li style=" color: #CD7F32">Bronze Member</li>
+            }
+            else if (user.OrderCount >= 60 && user.OrderCount < 90)
+            {
+                <li style="color: #808080">Silver Member</li>
+            }
+            else if (user.OrderCount >= 90)
+            {
+                <li style="color: #FFD700; text-align:center">Gold Member</li>
+            }
+            else
+            {
+
+            }
+        }
+
+
+
+    }
+
+
+    <li><a class="nav-link" href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+</ul>
+                }
+            }
+            else
+            {
+    <ul class="navbar-nav navbar-right">
+        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class="nav-link" })</li>
+        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class="nav-link" })</li>
+    </ul>
+}

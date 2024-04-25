@@ -1,0 +1,106 @@
+﻿@model Bits_And_Bytes_Vincenzo_Russo.Models.Order
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Order</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Payment.PaymentId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Payment.PaymentId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Customer.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Customer.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrderDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateCancelled)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateCancelled)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderTotal)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrderTotal)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsPaid)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsPaid)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrderStatus)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Subtotal)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Subtotal)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MembershipDiscount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MembershipDiscount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.VatAmount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.VatAmount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AddVat)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AddVat)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.OrderId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
